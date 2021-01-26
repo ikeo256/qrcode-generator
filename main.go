@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	// "html/template"
+	"html/template"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,6 +14,10 @@ func setupRouter() *gin.Engine {
 	r.LoadHTMLGlob("templates/*.html") // HTMLファイルがあるディレクトリを指定
 
 	r.GET("/", func(ctx *gin.Context) {
+		html := template.Must(template.ParseFiles("templates/navbar.html",
+		"templates/index.html"))
+
+        r.SetHTMLTemplate(html)
 		ctx.HTML(http.StatusOK, "navbar.html", gin.H{}) // サイトのトップにアクセスがきたらindex.htmlにルーティング
 	})
 
