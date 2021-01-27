@@ -21,6 +21,14 @@ func setupRouter() *gin.Engine {
 		ctx.HTML(http.StatusOK, "navbar.html", gin.H{}) // サイトのトップにアクセスがきたらindex.htmlにルーティング
 	})
 
+	r.GET("/settings", func(ctx *gin.Context) {
+		html := template.Must(template.ParseFiles("templates/navbar.html",
+		"templates/settings.html"))
+
+		r.SetHTMLTemplate(html)
+		ctx.HTML(http.StatusOK, "navbar.html", gin.H{})
+	})
+
 	return r
 }
 
