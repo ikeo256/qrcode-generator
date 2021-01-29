@@ -1,8 +1,11 @@
 package main
 
 import (
-	"net/http"
 	"html/template"
+	"log"
+	"net/http"
+	"snsmod/util"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,6 +38,22 @@ func setupRouter() *gin.Engine {
 
 		r.SetHTMLTemplate(html)
 		ctx.HTML(http.StatusOK, "navbar.html", gin.H{})
+	})
+
+	r.POST("/save", func(ctx *gin.Context) {
+		m := util.MySnsData{}
+
+		m.Facebook = strings.TrimSpace(ctx.PostForm("facebook"))
+		m.Twitter = strings.TrimSpace(ctx.PostForm("twitter"))
+		m.Instagram = strings.TrimSpace(ctx.PostForm("instagram"))
+		m.Line = strings.TrimSpace(ctx.PostForm("line"))
+
+		_, err := util.SaveUserItem(m)
+		if err != nil {
+			log.Print("An error has occured: %s\n", err)
+			return
+		}
+		ctx.Redirect(302, "/settings")
 	})
 
 	return r
